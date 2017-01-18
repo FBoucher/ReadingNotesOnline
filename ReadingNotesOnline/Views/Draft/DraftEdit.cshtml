@@ -1,0 +1,87 @@
+﻿@model ReadingNotesOnline.Models.ReadingNoteDraft
+
+
+@using (Html.BeginForm(MVC.Draft.Save(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h2>ReadingNote Draft</h2>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FileName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FileName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FileName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Tags, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+
+@foreach (string category in Model.Notes.Keys)
+{
+        <h3>@category</h3>   
+
+        var cntNote = Model.Notes[category].Count;
+
+            for (int n = 0; n < cntNote; n++)
+            {
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Notes[category][n].Title , htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Notes[category][n].Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Notes[category][n].Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <hr />
+
+        }
+
+        <hr />
+
+   
+}
+
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/tag")
+    <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
+
+<script>
+        $("input[id='note_Tags']").tagEditor({delimiter:'.'});
+</script>
+}
+
